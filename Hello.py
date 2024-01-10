@@ -5,11 +5,13 @@ from haystack.pipelines import Pipeline
 from haystack.nodes import PreProcessor
 import pandas as pd
 import numpy as np
-import openai 
+from openai import OpenAI
 import os
 import streamlit as st
 
-openai.api_key = os.environ["API_KEY"]
+API_KEY = os.environ["API_KEY"]
+openai_api_key = API_KEY
+
 file_path = 'Rieker_SUMMERANDWINTER_DATA.xlsx'
 
 Rieker_Database = pd.read_excel(file_path)
@@ -103,6 +105,12 @@ for message in st.session_state.messages:
 if 'chatVerlauf_UserInteraction' not in st.session_state:
         st.chatVerlauf_UserInteraction = []
 
+client = OpenAI(
+    api_key= openai_api_key
+)
+
+
+
 if prompt := st.chat_input("Hallo, wie kann ich dir weiterhelfen?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -142,7 +150,7 @@ if prompt := st.chat_input("Hallo, wie kann ich dir weiterhelfen?"):
          }) 
         
     st.session_state.chatVerlauf_UserInteraction.append({"role": "user", "content": user_input})
-    chat_User = openai.ChatCompletion.create(
+    chat_User = client.chat.completions.create(
     model="gpt-4-1106-preview",
     messages=st.session_state.chatVerlauf_UserInteraction
     )
