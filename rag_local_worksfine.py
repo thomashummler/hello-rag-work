@@ -9,8 +9,7 @@ from openai import OpenAI
 import os
 import streamlit as st
 
-API_KEY = os.environ["API_KEY"]
-openai_api_key = API_KEY
+openai_api_key = os.environ["API_KEY"]
 
 file_path = 'Rieker_SUMMERANDWINTER_DATA.xlsx'
 
@@ -41,6 +40,7 @@ for index, row in Rieker_Database.iterrows():
 
 
 #Gerade unklar ob preprocessor wirklich benutzt wird
+from haystack.nodes import PreProcessor
 preprocessor = PreProcessor(
     clean_empty_lines=True,
     clean_whitespace=True,
@@ -81,7 +81,9 @@ pipeline.add_node(component=join_documents, name="JoinDocuments", inputs=["Spars
 pipeline.add_node(component=rerank, name="ReRanker", inputs=["JoinDocuments"])
 
 
-
+client = OpenAI(
+    api_key= openai_api_key
+)
 
 
 
@@ -103,12 +105,6 @@ for message in st.session_state.messages:
 
 if 'chatVerlauf_UserInteraction' not in st.session_state:
         st.chatVerlauf_UserInteraction = []
-
-client = OpenAI(
-    api_key= openai_api_key
-)
-
-
 
 if prompt := st.chat_input("Hallo, wie kann ich dir weiterhelfen?"):
     # Add user message to chat history
@@ -150,14 +146,15 @@ if prompt := st.chat_input("Hallo, wie kann ich dir weiterhelfen?"):
         
     st.session_state.chatVerlauf_UserInteraction.append({"role": "user", "content": user_input})
     chat_User = client.chat.completions.create(
-    model="gpt-4-1106-preview",
-    messages=st.session_state.chatVerlauf_UserInteraction
+        model="gpt-4-1106-preview",
+        messages= st.session_state.chatVerlauf_UserInteraction
     )
     antwort_Message = chat_User.choices[0].message.content
     st.session_state.chatVerlauf_UserInteraction.append({"role": "assistant", "content": antwort_Message})
     with st.chat_message("assistant"):
         message_placeholder.markdown(antwort_Message)
     print( st.session_state.chatVerlauf_UserInteraction)
+    print(st.session_state.text_for_RAG)
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": antwort_Message})
 
