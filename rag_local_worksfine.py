@@ -100,7 +100,7 @@ start_Message_System = chat_Start.choices[0].message.content
 
 if 'chatVerlauf_UserInteraction' not in st.session_state:
         st.chatVerlauf_UserInteraction = []
-
+        st.session_state.messages.append({"role": "assistant", "content": start_Message_System})
 if 'text_for_RAG' not in st.session_state:
     st.session_state.text_for_RAG = ""
 
