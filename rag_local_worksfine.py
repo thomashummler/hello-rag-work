@@ -85,6 +85,17 @@ client = OpenAI(
     api_key= openai_api_key
 )
 
+chatVerlauf_startMessage=[{
+        "role": "system",
+           "content": f"You are a polite and helpful assistant who should help the user find the right shoes out of a Shoes Database.That's why you greet the user first and ask how you can help them.  "
+        }]
+chat_Start = client.chat.completions.create(
+         model="gpt-4-1106-preview",
+         messages=chatVerlauf_startMessage
+        )
+start_Message_System = chat_Start.choices[0].message.content
+
+
 
 
 if 'chatVerlauf_UserInteraction' not in st.session_state:
