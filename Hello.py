@@ -91,9 +91,6 @@ if 'chatVerlauf_UserInteraction' not in st.session_state:
 if 'text_for_RAG' not in st.session_state:
     st.session_state.text_for_RAG = ""
 
-st.title("Chatbot 2")
-
-
 client = OpenAI(
     api_key= openai_api_key
 )
