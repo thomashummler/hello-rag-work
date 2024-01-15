@@ -95,7 +95,7 @@ client = OpenAI(
     api_key= openai_api_key
 )
 
-st.title("Chatbot 2")
+st.title("Chatbot")
 
 chatVerlauf_UserInteraction=[{
         "role": "system",
