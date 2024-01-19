@@ -99,7 +99,7 @@ st.title("Chatbot")
 
 chatVerlauf_UserInteraction=[{
         "role": "system",
-           "content": f"You are a polite and helpful assistant who should help the user find the right shoes out of a Shoes Database.That's why you greet the user first and ask how you can help them.  "
+           "content": f"You are a polite and helpful assistant who should help the user find the right shoes out of a Shoes Database.That's why you greet the user first and ask how you can help them. All your Messages should be in German. "
         }]
 chat_User = client.chat.completions.create(
          model="gpt-4-1106-preview",
@@ -152,6 +152,7 @@ if prompt := st.chat_input("Hallo, wie kann ich dir weiterhelfen?"):
            "content": f"You are a polite, courteous and helpful assistant who should help the user find the right shoes.." 
                       f"You are getting passed a list of {documents} which contain Documents of retrieved shoes mit by a Hybrid Retrieval RAG Pipeline from Haystack."
                       f"You should only react to User Input that has something to do with shoe consultancy."
+                      f"You should always answer in the Language that the User is using."
                       f"If the User is trying is asking about something else than soes then explain to him that your purpose is it to find the right shoes. "
                       f"After every User Input the RAG Pipeline is getting started again ist retrieving to you a new List of new Documents"
                       f"You should check if the Informations in the documents match with the Informations that the User gave to you in the query and describe the shoes in a continuous text and not in embroidery dots for those Documents, who contain details about a shoe, who fit to the User Query "
